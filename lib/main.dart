@@ -1,47 +1,25 @@
+// ignore_for_file: unused_import
+
+import 'dart:ui';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gamestellar/home_page.dart';
+import 'package:gamestellar/firebase_options.dart';
 import 'package:gamestellar/login.dart';
-import 'app.dart';
+import 'package:gamestellar/register.dart';
+import 'noticias.dart';
+import 'package:dio/dio.dart';
 
-void main() {
-  runApp(MyApp());
-  
-}
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      title: 'GameStellar',
-      theme: ThemeData(primaryColor: Colors.deepPurple),
-      home: LoginPage(),
-      
-
-    );
-  }
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Directionality(
+      textDirection: TextDirection.ltr,
+      child: LoginPage(),
+    ),
+  ));
 }
-// O Comentado abaixo é igual ao pc do GUSTAVO (GENERETE (davi))
-//Comentei para Rodar a tela de Login por Primeiro
-/*  
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('bom dia'),
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/Planeta.png'),
-              //fit: BoxFit.cover, // Para cobrir toda a tela
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/

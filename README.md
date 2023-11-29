@@ -1,16 +1,11 @@
-# gamestellar
+<h1 align="center">
+<img width="32" height="32" src="https://img.icons8.com/color/48/flutter.png" alt="flutter"/> GameStellar
+</h1>
 
-A new Flutter project.
+>[!NOTE]
+> Este aplicativo está sendo desenvolvido para estudo e exemplificação de desenvolvimento com Flutter/Dart na matéria PAC (Projeto de Apredizado Colaborativo). O mesmo não será utilizado para fins comerciais.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+A idéia do aplicativo surgiu em torno de centralizar todas as informações relacionadas ao mundo de jogos eletrônicos, tais como lançamentos, placares de campeonato, reviews etc.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O escopo do aplicativo foi feito com base em diversas 

@@ -1,7 +1,6 @@
-//import 'dart:js_interop';
 import 'package:flutter/material.dart';
-import 'app.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gamestellar/register.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -17,13 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color.fromARGB(255, 0, 0, 0),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/Estrelas.gif'), // Substitua pelo caminho correto do seu GIF
+            image: AssetImage('images/Estrelas.gif'),
             fit: BoxFit.cover,
           ),
         ),
@@ -33,56 +29,51 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Image.asset(
-              //   'images/GameStellar.png', // Substitua pelo caminho correto da sua imagem
-              //   width: 500,
-              //   height: 200,
-              // ),
-              SizedBox(width: 1),
               Image.asset(
-                'images/Asteroids.gif', // Substitua pelo caminho correto da sua imagem
-                height: 100,
+                'images/Asteroids.gif',
+                height: 80,
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 autofocus: true,
                 keyboardType: TextInputType.name,
                 style: const TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: const InputDecoration(
-                  hintText: 'usuário',
-                  hintStyle: TextStyle(color: Color.fromARGB(87, 255, 255, 255)),
+                  hintText: 'Usuário',
+                  hintStyle: TextStyle(color: Colors.grey),
                   filled: true,
+                  fillColor: Colors.black,
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color.fromARGB(255, 50, 5, 173)), // Substitua "Colors.red" pela cor desejada
-                  ), 
+                    borderSide: BorderSide(color: Color.fromARGB(255, 84, 58, 152)),
+                  ),
                 ),
               ),
-              const SizedBox(height: 10), // Espaço entre os campos de entrada
+              const SizedBox(height: 20),
               TextFormField(
                 autofocus: true,
                 obscureText: !_showPassword,
                 keyboardType: TextInputType.name,
                 style: const TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'senha',
-                  hintStyle: TextStyle(color: Color.fromARGB(87, 255, 255, 255)),
+                  hintText: 'Senha',
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
+                  fillColor: Colors.black,
                   focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color.fromARGB(255, 50, 5, 173)), // Substitua "Colors.red" pela cor desejada
+                    borderSide: BorderSide(color: Color.fromARGB(255, 84, 58, 152)),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _showPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                          color: Color.fromARGB(87, 255, 255, 255),
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.grey,
                     ),
                     onPressed: () {
                       setState(() {
@@ -92,158 +83,169 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 16.0, right: 20.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          'Salvar',
-                          style: TextStyle( // Estilo de texto personalizado para o botão Switch
-                            fontSize: 16, // Tamanho da fonte
-                            fontWeight: FontWeight.bold, // Peso da fonte (opcional)
-                            color: Color.fromARGB(185, 255, 255, 255), // Cor da fonte
-                          ),
-                        ),
-                        Switch(
-                          value: _rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              _rememberMe = value;
-                            });
-                          },
-                          activeColor: const Color.fromRGBO(156, 39, 176, 1),
-                        ),
-                      ],
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Salvar',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => MyApp(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0); // aqui ta sendo definida a posição inicial da tela
-                              const end = Offset.zero; // aqui é a posição final da tela
-                              const curve = Curves.easeInOut; // aqui ele define uma curva?? pra animação
+                  ),
+                  Switch(
+                    value: _rememberMe,
+                    onChanged: (value) {
+                      setState(() {
+                        _rememberMe = value;
+                      });
+                    },
+                    activeColor: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const HomePage(),
+                      transitionsBuilder: (context, animation,
+                          secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
 
-                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
 
-                              var offsetAnimation = animation.drive(tween);
+                        var offsetAnimation = animation.drive(tween);
 
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                          ),
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
                         );
-                        // Coloque a função de autenticação aqui
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 68, 0, 255)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      child: const Text('Logar'),
+                      },  
                     ),
-                    const SizedBox(height: 10), // Espaço entre os botões
-                    ElevatedButton(
-                      onPressed: () {
-                        // Coloque a função para o segundo botão aqui
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 84, 0, 117)), // Cor do segundo botão
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      child: const Text('Cadastrar'),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 28, 73, 209)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    SizedBox(height: 10), // Espaço entre a linha e a caixa de texto
-
-                     Text(
-                      'Entrar Com ',
-                      style: TextStyle(
-                        color: Color.fromARGB(158, 155, 39, 176), // Cor do texto informativo
-                        fontSize: 16, // Tamanho do texto
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center, // Alinhamento do texto
-                    ),
-                     Divider(
-                      height: 1, // Altura da linha
-                      thickness: 1, // Espessura da linha
-                      color: const Color.fromARGB(255, 50, 5, 173), // Cor da linha
-                    ),
-                    SizedBox(height: 10),
-                    const SizedBox(height: 10), 
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Google
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(150, 255, 0, 76)), // Cor do botão do Google
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons.email), // Ícone do Google (substitua pelo ícone correto)
-                      label: const Text('Google'),
-                    ),// Espaço entre a linha e a caixa de texto
-
-                    const SizedBox(height: 7), // Espaço entre os botões
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Facebook
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 39, 0, 211)), // Cor do botão do Facebook
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons.facebook), // Ícone do Facebook (substitua pelo ícone correto)
-                      label: const Text('Facebook'),
-                    ),
-                    const SizedBox(height: 7), // Espaço entre os botões
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Facebook
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 51, 51, 51)), // Cor do botão do Facebook
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons.apple), // Ícone do Facebook (substitua pelo ícone correto)
-                      label: const Text('ID Apple'),
-                    ),
-                  ],
+                  ),
                 ),
+                child: const Text('Logar', style: TextStyle(fontSize: 16)),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const RegisterPage(),
+                      transitionsBuilder: (context, animation,
+                          secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 88, 23, 141)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                child: const Text('Cadastrar', style: TextStyle(fontSize: 16)),
+              ),
+              const SizedBox(height: 50),
+              const Text(
+                'Cadastrar com',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color.fromARGB(255, 126, 49, 189),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Google login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(202, 244, 67, 54)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.email, size: 18),
+                label: const Text('Google', style: TextStyle(fontSize: 14)),
+              ),
+              const SizedBox(height: 7),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Facebook login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(204, 33, 89, 243)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.facebook, size: 18),
+                label: const Text('Facebook', style: TextStyle(fontSize: 14)),
+              ),
+              const SizedBox(height: 7),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Apple ID login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 96, 94, 94)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.apple, size: 18),
+                label: const Text('Apple ID', style: TextStyle(fontSize: 14)),
               ),
             ],
           ),
         ),
       ),
-    
-    )
-    ;
+    );
   }
 }
