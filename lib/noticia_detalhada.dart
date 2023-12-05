@@ -7,14 +7,20 @@ import 'package:gamestellar/noticias.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const Directionality(
-    textDirection: TextDirection.ltr,
-    child: NoticiaDetalhada(),
-  ));
+  Noticia minhaNoticia = Noticia(id: '0', titulo: 'Título', imagemUrl: 'url', tag: 'Tag');
+
+  runApp(
+    Directionality(
+      textDirection: TextDirection.ltr,
+      child: NoticiaDetalhada(noticia: minhaNoticia), 
+    ),
+  );
 }
 
 class NoticiaDetalhada extends StatelessWidget {
-  const NoticiaDetalhada({super.key});
+  final Noticia noticia;
+
+  NoticiaDetalhada({required this.noticia, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class NoticiaDetalhada extends StatelessWidget {
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    const HomePage(),
+                                     HomePage(),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
@@ -106,13 +112,13 @@ class NoticiaDetalhada extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  const Noticia_Imagem(),
-                  const SizedBox(height: 16.0),
+                  Noticia_Imagem(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
+                  SizedBox(height: 16.0),
                   Container(
                     width: double.infinity,
                     height: 140,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(  // se liga no gradiente pica do pai
+                      gradient: const LinearGradient(
                         colors: [
                           Color.fromARGB(232, 134, 61, 202),
                           Color.fromARGB(232, 74, 20, 140),
@@ -131,18 +137,19 @@ class NoticiaDetalhada extends StatelessWidget {
                       ],
                     ),
                     alignment: Alignment.center,
-                    child: const Column(
+                    child: Column(
                       children: [
-                        Noticia_Titulo(),
-                        Noticia_Tag(),
+                        Noticia_Titulo(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
+                        Noticia_Tag(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20.0),
-                  const NoticiaTexto(),
+                  SizedBox(height: 20.0),
+                    NoticiaTexto(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
                 ],
               ),
             ),
+
           ],  
         ),
       ),

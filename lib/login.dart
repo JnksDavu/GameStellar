@@ -1,15 +1,22 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:gamestellar/register.dart';
 import 'home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';  
+
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _showPassword = false;
   bool _rememberMe = false;
 
@@ -23,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
             fit: BoxFit.cover,
           ),
         ),
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,15 +42,15 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.name,
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: const InputDecoration(
-                  hintText: 'Usuário',
+                  hintText: 'Email',
                   hintStyle: TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.black,
@@ -54,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                autofocus: true,
+                controller: _passwordController,
                 obscureText: !_showPassword,
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.visiblePassword,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -107,33 +114,28 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const HomePage(),
-                      transitionsBuilder: (context, animation,
-                          secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.easeInOut;
-
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-
-                        var offsetAnimation = animation.drive(tween);
-
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },  
-                    ),
-                  );
+                onPressed: () async {
+                  try {
+                    UserCredential userCredential =
+                        await _auth.signInWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+                    // Se o login for bem-sucedido, navegue para a tela principal
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  } catch (e) {
+                    // Handle errors, como exibição de uma mensagem de erro
+                    print("Erro no login: $e");
+                  }
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 28, 73, 209)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 28, 73, 209)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -147,30 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const RegisterPage(),
-                      transitionsBuilder: (context, animation,
-                          secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.easeInOut;
-
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-
-                        var offsetAnimation = animation.drive(tween);
-
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
                     ),
                   );
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 88, 23, 141)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 88, 23, 141)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),

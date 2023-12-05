@@ -15,12 +15,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MaterialApp(
-    home: Directionality(
-      textDirection: TextDirection.ltr,
-      child: HomePage(),
-    ),
-  ));
+runApp(MaterialApp(
+  home: Directionality(
+    textDirection: TextDirection.ltr,
+    child: HomePage(),
+  ),
+));
 }
 
 
@@ -39,8 +39,53 @@ class Noticia {
   });
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String selectedCategory = 'Home';
+  List<Noticia> noticiasList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Buscar notícias quando a tela for construída pela primeira vez
+    fetchAndSetNoticias();
+  }
+
+   void fetchAndSetNoticias() async {
+    // Obtém as notícias da categoria selecionada
+    List<Noticia> noticias = await fetchNoticias();
+
+    // Atualiza o estado com as notícias
+    setState(() {
+      noticiasList = noticias;
+    });
+  }
+
+  void updateNewsList(String category) async {
+    Navigator.pop(context); // Fecha o Drawer
+
+    // Atualiza o estado da categoria selecionada
+    setState(() {
+      selectedCategory = category;
+    });
+
+    // Obtém as notícias da categoria selecionada
+    List<Noticia> noticias = await fetchNoticias();
+
+    // Filtra as notícias com base na categoria selecionada
+    noticias = noticias.where((noticia) => noticia.tag == selectedCategory).toList();
+
+    // Atualiza o estado com as notícias filtradas
+    setState(() {
+      noticiasList = noticias;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,95 +146,7 @@ class HomePage extends StatelessWidget {
     ]);
   }
 
-  void _showTagsDrawer(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return buildCommonDrawer(context, [
-          ListTile(
-            title: Text('Dicas', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              // Handle 'Dicas' selection
-            },
-          ),
-          ListTile(
-            title: Text('Games', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              // Handle 'Games' selection
-            },
-          ),
-          ListTile(
-            title: Text('Listas', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              // Handle 'Listas' selection
-            },
-          ),
-          ListTile(
-            title: Text('Mobile', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              // Handle 'Mobile' selection
-            },
-          ),
-          ListTile(
-            title: Text('Previews', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              // Handle 'Previews' selection
-            },
-          ),
-          ListTile(
-            title: Text('Voltar', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.pop(context); // Close the tags drawer
-            },
-          ),
-        ]);
-      },
-    );
-  }
-
-  Widget buildCommonDrawer(BuildContext context, List<Widget> children) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.4,
-      child: Drawer(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: Container(
-            color: Color.fromARGB(232, 0, 0, 0),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: children,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-Future<List<Noticia>> fetchNoticias() async {
-  final firestore = FirebaseFirestore.instance;
-  final collectionNames = ['Games', 'Especiais', 'Reviews' , 'Mobile', 'Dicas', 'Entrevistas', 'Cultura Pop', 'Previews', 'Listas']; // Substitua pelos nomes de suas coleções
-  final List<Noticia> allNoticias = [];
-
-  for (final collectionName in collectionNames) {
-    final noticiasData = await firestore.collection(collectionName).get();
-
-    final noticias = noticiasData.docs.map((doc) {
-      final data = doc.data();
-      return Noticia(
-        id: doc.id,
-        titulo: data['Titulo'] ?? 'Sem título',
-        imagemUrl: data['Img'] ?? '',
-        tag: data['Tag'] ?? 'Sem tag',
-      );
-    }).toList();
-
-    allNoticias.addAll(noticias);
-  }
-
-  return allNoticias;
-}
-
-  Widget buildBody() {
+    Widget buildBody() {
     return Stack(
       children: <Widget>[
         Container(
@@ -239,23 +196,17 @@ Future<List<Noticia>> fetchNoticias() async {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return FutureBuilder<List<Noticia>>(
-                    future: fetchNoticias(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return const Text("Erro ao carregar notícias");
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Text("Nenhuma notícia encontrada");
-                      } else {
-                        final noticia = snapshot.data![index];
-                        return buildNoticiaCard(context, noticia);
-
-                      }
-                    },
-                  );
+                  if (noticiasList.isEmpty) {
+                    return const CircularProgressIndicator();
+                  // ignore: unnecessary_null_comparison
+                  } else if (noticiasList[index] == null) {
+                    return const Text("Erro ao carregar notícias");
+                  } else {
+                    final noticia = noticiasList[index];
+                    return buildNoticiaCard(context, noticia);
+                  }
                 },
+                childCount: noticiasList.length == 0 ? 1 : noticiasList.length,
               ),
             ),
           ],
@@ -263,6 +214,107 @@ Future<List<Noticia>> fetchNoticias() async {
       ],
     );
   }
+
+  void _showTagsDrawer(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return buildCommonDrawer(context, [
+          ListTile(
+            title: Text('Dicas', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Dicas');
+            },
+          ),
+          ListTile(
+            title: Text('Games', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Games');
+            },
+          ),
+          ListTile(
+            title: Text('Listas', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Listas');
+            },
+          ),
+          ListTile(
+            title: Text('Mobile', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Mobile');
+            },
+          ),
+          ListTile(
+            title: Text('Previews', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Previews');
+            },
+          ),
+          ListTile(
+            title: Text('Voltar', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context); // Close the tags drawer
+            },
+          ),
+        ]);
+      },
+    );
+  }
+
+
+  Widget buildCommonDrawer(BuildContext context, List<Widget> children) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.4,
+      child: Drawer(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: Container(
+            color: Color.fromARGB(232, 0, 0, 0),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: children,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+Future<List<Noticia>> fetchNoticias() async {
+  final firestore = FirebaseFirestore.instance;
+  final collectionNames = ['Games', 'Especiais', 'Reviews' , 'Mobile', 'Dicas', 'Entrevistas', 'Cultura Pop', 'Previews', 'Listas'];
+  final List<Noticia> allNoticias = [];
+
+  for (final collectionName in collectionNames) {
+    final noticiasData = await firestore.collection(collectionName).get();
+
+    final noticias = noticiasData.docs.map((doc) {
+      final data = doc.data();
+      return Noticia(
+        id: doc.id,
+        titulo: data['Titulo'] ?? 'Sem título',
+        imagemUrl: data['Img'] ?? '',
+        tag: data['Tag'] ?? 'Sem tag',
+      );
+    }).toList();
+
+    allNoticias.addAll(noticias);
+  }
+
+  return allNoticias;
+}
+
+
+void _navigateToNoticiaDetalhada(BuildContext context, Noticia noticia) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => NoticiaDetalhada(noticia: noticia),
+    ),
+  );
+
+}
+
+
 
 
 Widget buildNoticiaCard(BuildContext context, Noticia noticia) {
@@ -276,7 +328,12 @@ Widget buildNoticiaCard(BuildContext context, Noticia noticia) {
             borderRadius: BorderRadius.circular(8.0),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NoticiaDetalhada()));
+                _navigateToNoticiaDetalhada(context, Noticia(
+                  id: noticia.id,
+                  titulo: noticia.titulo,
+                  imagemUrl: noticia.imagemUrl,
+                  tag: noticia.tag,
+                ));
               },
               child: Image.network(noticia.imagemUrl),
             ),
@@ -308,4 +365,3 @@ Widget buildNoticiaCard(BuildContext context, Noticia noticia) {
     ),
   );
 }
-

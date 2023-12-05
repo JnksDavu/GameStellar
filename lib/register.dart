@@ -1,20 +1,22 @@
-//import 'dart:js_interop';
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
-import 'package:gamestellar/login.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login.dart';
 import 'home_page.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _confirmEmailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _showPassword = false;
 
   @override
@@ -42,22 +44,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              _buildInputField('Email', Icons.mail),
-              const SizedBox(
-                height: 10,
-              ),
-              _buildInputField('Confirmar Email', Icons.mail),
-              const SizedBox(
-                height: 10,
-              ),
-              _buildPasswordField('Senha'),
-              const SizedBox(
-                height: 10,
-              ),
-              _buildPasswordField('Confirmar Senha'),
+              const SizedBox(height: 30),
+              _buildInputField('Email', _emailController, Icons.mail),
+              const SizedBox(height: 10),
+              _buildInputField(
+                  'Confirmar Email', _confirmEmailController, Icons.mail),
+              const SizedBox(height: 10),
+              _buildPasswordField('Senha', _passwordController),
+              const SizedBox(height: 10),
+              _buildPasswordField(
+                  'Confirmar Senha', _confirmPasswordController),
               const SizedBox(height: 30),
               _buildElevatedButton('Cadastrar'),
               const SizedBox(height: 10),
@@ -69,8 +65,10 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildInputField(String hintText, IconData icon) {
+  Widget _buildInputField(
+      String hintText, TextEditingController controller, IconData icon) {
     return TextFormField(
+      controller: controller,
       autofocus: true,
       style: const TextStyle(
         color: Colors.white,
@@ -93,8 +91,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildPasswordField(String hintText) {
+  Widget _buildPasswordField(String hintText, TextEditingController controller) {
     return TextFormField(
+      controller: controller,
       autofocus: true,
       obscureText: !_showPassword,
       style: const TextStyle(
@@ -131,16 +130,26 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildElevatedButton(String text) {
     return ElevatedButton(
-      onPressed: () {
-        // Coloque a função de autenticação aqui
+      onPressed: () async {
+        try {
+          // ignore: unused_local_variable
+          UserCredential userCredential =
+              await _auth.createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
 
-        // Navega para a tela de login quando o botão "Cadastrar" é pressionado
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
+          // Se o registro for bem-sucedido, navegue para a tela principal
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } catch (e) {
+          // Handle errors, como exibição de uma mensagem de erro
+          print("Erro no registro: $e");
+        }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 103, 49, 178)),
