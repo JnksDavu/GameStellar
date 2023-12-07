@@ -251,6 +251,12 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           ListTile(
+            title: Text('Cultura Pop', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              updateNewsList('Cultura Pop');
+            },
+          ),
+          ListTile(
             title: Text('Voltar', style: TextStyle(color: Colors.white)),
             onTap: () {
               Navigator.pop(context); // Close the tags drawer

@@ -112,7 +112,7 @@ class NoticiaDetalhada extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  Noticia_Imagem(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
+                  Noticia_Imagem(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                   SizedBox(height: 16.0),
                   Container(
                     width: double.infinity,
@@ -139,13 +139,13 @@ class NoticiaDetalhada extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Column(
                       children: [
-                        Noticia_Titulo(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
-                        Noticia_Tag(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
+                        Noticia_Titulo(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                        Noticia_Tag(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                       ],
                     ),
                   ),
                   SizedBox(height: 20.0),
-                    NoticiaTexto(noticiaId: noticia.id, collectionName: ['Especiais', 'Games']),
+                    NoticiaTexto(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                 ],
               ),
             ),
