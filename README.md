@@ -1,5 +1,4 @@
-![image](https://github.com/JnksDavu/GameStellar/assets/108496905/3a334a0a-cb18-4f48-98d2-56feb420dbde)<h1 align="center">
-![image](https://github.com/JnksDavu/GameStellar/assets/108496905/9a92d131-9b4b-487d-92fe-b7a0497da0bf)
+<h1>
  Web Scraping
 </h1>
 
