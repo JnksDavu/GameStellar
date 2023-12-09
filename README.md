@@ -1,5 +1,6 @@
-<h1 align="center">
-<img width="32" height="32" src="https://img.icons8.com/color/48/flutter.png" alt="flutter"/> Web Scraping
+![image](https://github.com/JnksDavu/GameStellar/assets/108496905/3a334a0a-cb18-4f48-98d2-56feb420dbde)<h1 align="center">
+![image](https://github.com/JnksDavu/GameStellar/assets/108496905/9a92d131-9b4b-487d-92fe-b7a0497da0bf)
+ Web Scraping
 </h1>
 
 >[!NOTE]
