@@ -15,9 +15,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const Directionality(
-    textDirection: TextDirection.ltr,
-    child: LoginPage(),
-    // Crie um widget MyApp para envolver todas as classes
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Directionality(
+      textDirection: TextDirection.ltr,
+      child: LoginPage(),
+    ),
   ));
 }
