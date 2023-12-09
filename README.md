@@ -1,5 +1,5 @@
-<h1>
- Web Scraping
+<h1 align="center">
+<img width="32" height="32" src="[https://img.icons8.com/color/48/flutter.png](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/800px-Python-logo-notext.svg.png)" alt="Python"/> GameStellar
 </h1>
 
 >[!NOTE]
