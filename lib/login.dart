@@ -1,96 +1,118 @@
-//import 'dart:js_interop';
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:gamestellar/register.dart';
 import 'home_page.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';  
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _showPassword = false;
-  bool _rememberMe = false;
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      // Adicione aqui o código para lidar com a redefinição de senha bem-sucedida
+      print('E-mail de redefinição de senha enviado para $email');
+      
+      Fluttertoast.showToast(
+        msg: "Email para alteração se senha envidado!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+      
+    } on FirebaseAuthException catch (e) {
+      // Adicione aqui o código para lidar com falhas na redefinição de senha
+      print('Erro ao enviar e-mail de redefinição de senha: $e');
+      
+      Fluttertoast.showToast(
+        msg: "Email invalido!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color.fromARGB(255, 0, 0, 0),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'images/Estrelas.gif'), // Substitua pelo caminho correto do seu GIF
+            image: AssetImage('images/Estrelas.gif'),
             fit: BoxFit.cover,
           ),
         ),
-        padding: const EdgeInsets.all(5),
+        //padding: const EdgeInsets.all(20),
         child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Image.asset(
-              //   'images/GameStellar.png', // Substitua pelo caminho correto da sua imagem
-              //   width: 500,
-              //   height: 200,
-              // ),
-              const SizedBox(width: 1),
               Image.asset(
-                'images/Asteroids.gif', // Substitua pelo caminho correto da sua imagem
-                height: 100,
+                'images/Asteroids.gif',
+                height: 80,
               ),
+              const SizedBox(height: 10),
               TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.name,
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: const InputDecoration(
-                  hintText: 'usuário',
-                  hintStyle:
-                      TextStyle(color: Color.fromARGB(87, 255, 255, 255)),
+                  hintText: 'Email',
+                  hintStyle: TextStyle(color: Colors.grey),
                   filled: true,
+                  fillColor: Colors.black,
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color.fromARGB(255, 50, 5,
-                            173)), // Substitua "Colors.red" pela cor desejada
+                    borderSide: BorderSide(color: Color.fromARGB(255, 84, 58, 152)),
                   ),
                 ),
               ),
-              const SizedBox(height: 10), // Espaço entre os campos de entrada
+              const SizedBox(height: 20),
               TextFormField(
-                autofocus: true,
+                controller: _passwordController,
                 obscureText: !_showPassword,
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.visiblePassword,
                 style: const TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'senha',
-                  hintStyle:
-                      const TextStyle(color: Color.fromARGB(87, 255, 255, 255)),
+                  hintText: 'Senha',
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
+                  fillColor: Colors.black,
                   focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color.fromARGB(255, 50, 5,
-                            173)), // Substitua "Colors.red" pela cor desejada
+                    borderSide: BorderSide(color: Color.fromARGB(255, 84, 58, 152)),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _showPassword ? Icons.visibility : Icons.visibility_off,
-                      color: const Color.fromARGB(87, 255, 255, 255),
+                      color: Colors.grey,
                     ),
                     onPressed: () {
                       setState(() {
@@ -100,212 +122,155 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 16.0, right: 20.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        const Text(
-                          'Salvar',
-                          style: TextStyle(
-                            // Estilo de texto personalizado para o botão Switch
-                            fontSize: 16, // Tamanho da fonte
-                            fontWeight:
-                                FontWeight.bold, // Peso da fonte (opcional)
-                            color: Color.fromARGB(
-                                185, 255, 255, 255), // Cor da fonte
-                          ),
-                        ),
-                        Switch(
-                          value: _rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              _rememberMe = value;
-                            });
-                          },
-                          activeColor: const Color.fromRGBO(156, 39, 176, 1),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const HomePage(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              const begin = Offset(1.0,
-                                  0.0); // aqui ta sendo definida a posição inicial da tela
-                              const end =
-                                  Offset.zero; // aqui é a posição final da tela
-                              const curve = Curves
-                                  .easeInOut; // aqui ele define uma curva?? pra animação
-
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
-
-                              var offsetAnimation = animation.drive(tween);
-
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                        // Coloque a função de autenticação aqui
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(255, 68, 0, 255)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    UserCredential userCredential =
+                        await _auth.signInWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+                    Fluttertoast.showToast(
+                        msg: "Bem Vindo!!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                    // Se o login for bem-sucedido, navegue para a tela principal
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(userEmail: _emailController.text,),
                       ),
-                      child: const Text('Logar'),
+                    );
+                  } catch (e) {
+                    // Handle errors, como exibição de uma mensagem de erro
+                    print("Erro no login: $e");
+                    Fluttertoast.showToast(
+                        msg: "Email ou senha inválido!!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 28, 73, 209)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    const SizedBox(height: 10), // Espaço entre os botões
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const RegisterPage(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              const begin = Offset(1.0,
-                                  0.0); // aqui ta sendo definida a posição inicial da tela
-                              const end =
-                                  Offset.zero; // aqui é a posição final da tela
-                              const curve = Curves
-                                  .easeInOut; // aqui ele define uma curva?? pra animação
-
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
-
-                              var offsetAnimation = animation.drive(tween);
-
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(
-                                255, 84, 0, 117)), // Cor do segundo botão
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      child: const Text('Cadastrar'),
-                    ),
-                    const SizedBox(
-                        height: 10), // Espaço entre a linha e a caixa de texto
-
-                    const Text(
-                      'Entrar Com ',
-                      style: TextStyle(
-                        color: Color.fromARGB(
-                            158, 155, 39, 176), // Cor do texto informativo
-                        fontSize: 16, // Tamanho do texto
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center, // Alinhamento do texto
-                    ),
-                    const Divider(
-                      height: 1, // Altura da linha
-                      thickness: 1, // Espessura da linha
-                      color:
-                          Color.fromARGB(255, 50, 5, 173), // Cor da linha
-                    ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Google
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(
-                                150, 255, 0, 76)), // Cor do botão do Google
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons
-                          .email), // Ícone do Google (substitua pelo ícone correto)
-                      label: const Text('Google'),
-                    ), // Espaço entre a linha e a caixa de texto
-
-                    const SizedBox(height: 7), // Espaço entre os botões
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Facebook
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(
-                                255, 39, 0, 211)), // Cor do botão do Facebook
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons
-                          .facebook), // Ícone do Facebook (substitua pelo ícone correto)
-                      label: const Text('Facebook'),
-                    ),
-                    const SizedBox(height: 7), // Espaço entre os botões
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Lógica para login com Facebook
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(
-                                255, 51, 51, 51)), // Cor do botão do Facebook
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Raio dos cantos (ajuste conforme necessário)
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons
-                          .apple), // Ícone do Facebook (substitua pelo ícone correto)
-                      label: const Text('ID Apple'),
-                    ),
-                  ],
+                  ),
                 ),
+                child: const Text('Logar', style: TextStyle(fontSize: 16)),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  resetPassword(_emailController.text.trim());
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 129, 1, 164)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                child: const Text('Esqueci minha senha', style: TextStyle(fontSize: 16)),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 88, 23, 141)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                child: const Text('Cadastrar', style: TextStyle(fontSize: 16)),
+              ),
+              const SizedBox(height: 50),
+              const Text(
+                'Cadastrar com',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color.fromARGB(255, 126, 49, 189),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Google login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(202, 244, 67, 54)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.email, size: 18),
+                label: const Text('Google', style: TextStyle(fontSize: 14)),
+              ),
+              const SizedBox(height: 7),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Facebook login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(204, 33, 89, 243)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.facebook, size: 18),
+                label: const Text('Facebook', style: TextStyle(fontSize: 14)),
+              ),
+              const SizedBox(height: 7),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Apple ID login logic
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 96, 94, 94)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.apple, size: 18),
+                label: const Text('Apple ID', style: TextStyle(fontSize: 14)),
               ),
             ],
           ),

@@ -1,48 +1,39 @@
-// ignore_for_file: unused_import
-
 import 'dart:ui';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestellar/home_page.dart';
-import 'package:gamestellar/firebase_options.dart';
-import 'package:gamestellar/login.dart';
-import 'package:gamestellar/register.dart';
-import 'noticias.dart';
-import 'package:dio/dio.dart';
-
-
+import 'package:gamestellar/noticias.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const Directionality(
-    textDirection: TextDirection.ltr,
-    child: NoticiaDetalhada(),
-    // Crie um widget MyApp para envolver todas as classes
-  ));
+  Noticia minhaNoticia = Noticia(id: '0', titulo: 'Título', imagemUrl: 'url', tag: 'Tag');
+
+  runApp(
+    Directionality(
+      textDirection: TextDirection.ltr,
+      child: NoticiaDetalhada(noticia: minhaNoticia), 
+    ),
+  );
 }
 
-
-
 class NoticiaDetalhada extends StatelessWidget {
-  const NoticiaDetalhada({super.key});
-  
+  final Noticia noticia;
+
+  NoticiaDetalhada({required this.noticia, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor:
-            const Color.fromARGB(226, 0, 0, 0), // Define o fundo como preto
+        backgroundColor: Colors.black, 
         drawer: SizedBox(
           width: MediaQuery.of(context).size.width * 0.4,
           child: Drawer(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
               child: Container(
-                color: const Color.fromARGB(232, 0, 0, 0),
+                color: Colors.black87,
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: <Widget>[
@@ -50,36 +41,12 @@ class NoticiaDetalhada extends StatelessWidget {
                       title: const Text('Home'),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const RegisterPage()));
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('E-sports'),
-                      textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pop(context);
-                        // Navegue para a página "E-sports" aqui
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Tags'),
-                      textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pop(context);
-                        // Navegue para a página "Tags" aqui
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Sair'),
-                      textColor: Colors.white,
-                      onTap: () {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    const LoginPage(),
+                                     HomePage(userEmail: '',),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
@@ -117,7 +84,7 @@ class NoticiaDetalhada extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              backgroundColor: const Color.fromARGB(105, 6, 5, 5),
+              backgroundColor: Colors.black87,
               title: Row(
                 children: [
                   Flexible(
@@ -145,58 +112,47 @@ class NoticiaDetalhada extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  const Noticia_Imagem(),
-                  const SizedBox(
-                      height: 16.0), // Espaço vertical entre imagem e título
+                  Noticia_Imagem(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                  SizedBox(height: 16.0),
                   Container(
-                    width: 300, // Largura desejada
-                    height: 140, // Altura desejada
-                    color: const Color.fromARGB(232, 134, 61, 202), // Defina a cor de fundo roxo claro aqui
+                    width: double.infinity,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(232, 134, 61, 202),
+                          Color.fromARGB(232, 74, 20, 140),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
                     alignment: Alignment.center,
-                    child: const Column(
+                    child: Column(
                       children: [
-                        Noticia_Titulo(),
-                        Noticia_Tag(),
+                        Noticia_Titulo(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                        Noticia_Tag(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20.0),
-                  const NoticiaTexto(),
-                  // Adicione outros widgets do conteúdo aqui
+                  SizedBox(height: 20.0),
+                    NoticiaTexto(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                 ],
               ),
             ),
-          ],
+
+          ],  
         ),
       ),
     );
   }
 }
-
-
-
-
-// O Comentado abaixo é igual ao pc do GUSTAVO (GENERETE (davi))
-//Comentei para Rodar a tela de Login por Primeiro
-/*  
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('bom dia'),
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/Planeta.png'),
-              //fit: BoxFit.cover, // Para cobrir toda a tela
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
