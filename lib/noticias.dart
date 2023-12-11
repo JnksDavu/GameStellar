@@ -10,14 +10,16 @@ import 'package:dio/dio.dart';
 
 //IMAGEM
 
-// ignore: camel_case_types
 class Noticia_Imagem extends StatelessWidget {
-  const Noticia_Imagem({super.key});
+  final String noticiaId;
+  final List<String> collectionName;
+
+  const Noticia_Imagem({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('Games').doc('2').get(),
+      future: _fetchDocumentInCollections(noticiaId, collectionName),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Algo deu errado");
@@ -30,9 +32,7 @@ class Noticia_Imagem extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic>? data = snapshot.data!.data() as Map<String, dynamic>?;
           if (data != null && data['Img'] != null) {
-            // Obtenha a URL da imagem como uma string
             String imageUrl = data['Img'];
-            // Utilize o Image.network para exibir a imagem da URL do Firestore
             return Image.network(imageUrl);
           } else {
             return const Text("URL da imagem não encontrada");
@@ -43,67 +43,36 @@ class Noticia_Imagem extends StatelessWidget {
       },
     );
   }
-}
 
-//IMAGEM COM PROXY
-/*
-class Noticia_Imagem extends StatelessWidget {
-  Future<Widget> _fetchImage() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance.collection('Games').doc('1').get();
-      if (!snapshot.exists) {
-        return Text("O documento não existe");
+  Future<DocumentSnapshot> _fetchDocumentInCollections(String noticiaId, List<String> collectionName) async {
+    late DocumentSnapshot documentSnapshot;
+
+    for (final collectionName in collectionName) {
+      documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
+
+      if (documentSnapshot.exists) {
+        break;
       }
-
-      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null && data['Img'] != null) {
-        String imageUrl = data['Img'];
-        String proxyUrl = 'http://10.0.2.2:3000/img/';
-        Dio dio = Dio();
-        final response = await dio.get(proxyUrl + imageUrl, options: Options(responseType: ResponseType.bytes));
-
-        if (response.statusCode == 200) {
-          return Image.memory(response.data);
-        } else {
-          return Text("Falha ao carregar a imagem - Status Code: ${response.statusCode}");
-        }
-      } else {
-        return Text("URL da imagem não encontrada");
-      }
-    } catch (e) {
-      print("Erro ao buscar documento: $e");
-      return Text("Erro ao buscar o documento");
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: _fetchImage(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return snapshot.data ?? Text("Erro desconhecido");
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
+    return documentSnapshot;
   }
 }
-*/
 
 
+ //toda essa palhaçada deveria estar na noticia_detalhada, mas eu fiz cagada e coloquei aqui, perdão pelo vacilo rs
 
-
-//TAG
-// ignore: camel_case_types
+//TAGS
 class Noticia_Tag extends StatelessWidget {
-  const Noticia_Tag({super.key});
+  final String noticiaId;
+  final List<String> collectionName;
+
+  const Noticia_Tag({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('Games').doc('2').get(),
+      future: _fetchDocumentInCollections(noticiaId, collectionName),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Algo deu errado");
@@ -137,16 +106,32 @@ class Noticia_Tag extends StatelessWidget {
 }
 
 
+  Future<DocumentSnapshot> _fetchDocumentInCollections(String noticiaId, List<String> collectionName) async {
+    late DocumentSnapshot documentSnapshot;
+
+    for (final collectionName in collectionName) {
+      documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
+
+      if (documentSnapshot.exists) {
+        break;
+      }
+    }
+
+    return documentSnapshot;
+  }
+
 
 //TITULO
-// ignore: camel_case_types
 class Noticia_Titulo extends StatelessWidget {
-  const Noticia_Titulo({super.key});
+  final String noticiaId;
+  final List<String> collectionName;
+
+  const Noticia_Titulo({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('Games').doc('2').get(),
+      future: _fetchDocumentInCollections(noticiaId, collectionName),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Algo deu errado");
@@ -180,6 +165,20 @@ class Noticia_Titulo extends StatelessWidget {
       },
     );
   }
+
+  Future<DocumentSnapshot> _fetchDocumentInCollections(String noticiaId, List<String> collectionName) async {
+    late DocumentSnapshot documentSnapshot;
+
+    for (final collectionName in collectionName) {
+      documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
+
+      if (documentSnapshot.exists) {
+        break;
+      }
+    }
+
+    return documentSnapshot;
+  }
 }
 
 
@@ -187,12 +186,15 @@ class Noticia_Titulo extends StatelessWidget {
 
 //TEXTO
 class NoticiaTexto extends StatelessWidget {
-  const NoticiaTexto({super.key});
+  final String noticiaId;
+  final List<String> collectionName;
+
+  const NoticiaTexto({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('Games').doc('2').get(),
+      future: _fetchDocumentInCollections(noticiaId, collectionName),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Algo deu errado");
@@ -224,4 +226,19 @@ class NoticiaTexto extends StatelessWidget {
       },
     );
   }
+
+  Future<DocumentSnapshot> _fetchDocumentInCollections(String noticiaId, List<String> collectionName) async {
+    late DocumentSnapshot documentSnapshot;
+
+    for (final collectionName in collectionName) {
+      documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
+
+      if (documentSnapshot.exists) {
+        break;
+      }
+    }
+
+    return documentSnapshot;
+  }
 }
+
