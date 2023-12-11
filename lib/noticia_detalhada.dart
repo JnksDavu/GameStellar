@@ -1,21 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:gamestellar/home_page.dart';
 import 'package:gamestellar/noticias.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  Noticia minhaNoticia = Noticia(id: '0', titulo: 'Título', imagemUrl: 'url', tag: 'Tag',);
-
-  runApp(
-    Directionality(
-      textDirection: TextDirection.ltr,
-      child: NoticiaDetalhada(noticia: minhaNoticia), 
-    ),
-  );
-}
 
 class NoticiaDetalhada extends StatelessWidget {
   final Noticia noticia;
@@ -26,7 +12,7 @@ class NoticiaDetalhada extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.black, 
+        backgroundColor: Colors.black,
         drawer: SizedBox(
           width: MediaQuery.of(context).size.width * 0.4,
           child: Drawer(
@@ -34,40 +20,43 @@ class NoticiaDetalhada extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
               child: Container(
                 color: Colors.black87,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    ListTile(
-                      title: const Text('Home'),
-                      textColor: Colors.white,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                     const HomePage(userEmail: '',),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0);
-                              const end = Offset.zero;
-                              const curve = Curves.easeInOut;
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50.0), // Ajuste esta margem conforme necessário
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      ListTile(
+                        title: const Text('Home'),
+                        textColor: Colors.white,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const HomePage(userEmail: '',),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeInOut;
 
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
 
-                              var offsetAnimation = animation.drive(tween);
+                                var offsetAnimation = animation.drive(tween);
 
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -98,15 +87,7 @@ class NoticiaDetalhada extends StatelessWidget {
                   ),
                 ],
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  color: Colors.white,
-                  onPressed: () {
-                    print('Pesquisar');
-                  },
-                ),
-              ],
+              actions: const <Widget>[],
               floating: false,
             ),
             SliverList(
@@ -144,13 +125,12 @@ class NoticiaDetalhada extends StatelessWidget {
                       ],
                     ),
                   ),
-                 const SizedBox (height: 20.0),
-                    NoticiaTexto(noticiaId: noticia.id, collectionName: const ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                  const SizedBox(height: 20.0),
+                  NoticiaTexto(noticiaId: noticia.id, collectionName: const ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                 ],
               ),
             ),
-
-          ],  
+          ],
         ),
       ),
     );
