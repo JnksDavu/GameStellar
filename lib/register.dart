@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
-import 'home_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -138,21 +138,37 @@ class _RegisterPageState extends State<RegisterPage> {
             email: _emailController.text,
             password: _passwordController.text,
           );
+          Fluttertoast.showToast(
+              msg: "Usuário cadastrado com Sucesso!!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
 
-          // Se o registro for bem-sucedido, navegue para a tela principal
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => const LoginPage(),
             ),
           );
         } catch (e) {
-          // Handle errors, como exibição de uma mensagem de erro
           print("Erro no registro: $e");
+          Fluttertoast.showToast(
+              msg: "Erro ao criar cadastro!!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
         }
       },
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 103, 49, 178)),
+        backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 103, 49, 178)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -176,7 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         );
       },
-      child: Text(
+      child: const Text(
         "Se já possui uma conta, faça login.",
         style: TextStyle(
           color: Colors.grey,

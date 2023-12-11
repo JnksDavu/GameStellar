@@ -14,7 +14,7 @@ class Noticia_Imagem extends StatelessWidget {
   final String noticiaId;
   final List<String> collectionName;
 
-  Noticia_Imagem({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
+  const Noticia_Imagem({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,7 @@ class Noticia_Imagem extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic>? data = snapshot.data!.data() as Map<String, dynamic>?;
           if (data != null && data['Img'] != null) {
-            // Obtenha a URL da imagem como uma string
             String imageUrl = data['Img'];
-            // Utilize o Image.network para exibir a imagem da URL do Firestore
             return Image.network(imageUrl);
           } else {
             return const Text("URL da imagem não encontrada");
@@ -53,7 +51,6 @@ class Noticia_Imagem extends StatelessWidget {
       documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
 
       if (documentSnapshot.exists) {
-        // Se o documento existir, interrompa o loop
         break;
       }
     }
@@ -62,12 +59,15 @@ class Noticia_Imagem extends StatelessWidget {
   }
 }
 
+
+ //toda essa palhaçada deveria estar na noticia_detalhada, mas eu fiz cagada e coloquei aqui, perdão pelo vacilo rs
+
 //TAGS
 class Noticia_Tag extends StatelessWidget {
   final String noticiaId;
   final List<String> collectionName;
 
-  Noticia_Tag({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
+  const Noticia_Tag({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +113,6 @@ class Noticia_Tag extends StatelessWidget {
       documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
 
       if (documentSnapshot.exists) {
-        // Se o documento existir, interrompa o loop
         break;
       }
     }
@@ -127,7 +126,7 @@ class Noticia_Titulo extends StatelessWidget {
   final String noticiaId;
   final List<String> collectionName;
 
-  Noticia_Titulo({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
+  const Noticia_Titulo({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +173,6 @@ class Noticia_Titulo extends StatelessWidget {
       documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
 
       if (documentSnapshot.exists) {
-        // Se o documento existir, interrompa o loop
         break;
       }
     }
@@ -191,7 +189,7 @@ class NoticiaTexto extends StatelessWidget {
   final String noticiaId;
   final List<String> collectionName;
 
-  NoticiaTexto({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
+  const NoticiaTexto({required this.noticiaId, required this.collectionName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +234,6 @@ class NoticiaTexto extends StatelessWidget {
       documentSnapshot = await FirebaseFirestore.instance.collection(collectionName).doc(noticiaId).get();
 
       if (documentSnapshot.exists) {
-        // Se o documento existir, interrompa o loop
         break;
       }
     }

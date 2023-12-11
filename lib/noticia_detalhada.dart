@@ -7,7 +7,7 @@ import 'package:gamestellar/noticias.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Noticia minhaNoticia = Noticia(id: '0', titulo: 'Título', imagemUrl: 'url', tag: 'Tag');
+  Noticia minhaNoticia = Noticia(id: '0', titulo: 'Título', imagemUrl: 'url', tag: 'Tag',);
 
   runApp(
     Directionality(
@@ -46,7 +46,7 @@ class NoticiaDetalhada extends StatelessWidget {
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                     HomePage(),
+                                     const HomePage(userEmail: '',),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
@@ -112,8 +112,8 @@ class NoticiaDetalhada extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  Noticia_Imagem(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
-                  SizedBox(height: 16.0),
+                  Noticia_Imagem(noticiaId: noticia.id, collectionName: const ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                  const SizedBox(height: 16.0),
                   Container(
                     width: double.infinity,
                     height: 140,
@@ -139,13 +139,13 @@ class NoticiaDetalhada extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Column(
                       children: [
-                        Noticia_Titulo(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
-                        Noticia_Tag(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                        Noticia_Titulo(noticiaId: noticia.id, collectionName: const  ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                        Noticia_Tag(noticiaId: noticia.id, collectionName: const ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                       ],
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                    NoticiaTexto(noticiaId: noticia.id, collectionName: ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
+                 const SizedBox (height: 20.0),
+                    NoticiaTexto(noticiaId: noticia.id, collectionName: const ['Especiais', 'Games', 'Dicas', 'Cultura Pop', 'Listas']),
                 ],
               ),
             ),
