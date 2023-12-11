@@ -6,32 +6,39 @@
 > Este aplicativo está sendo desenvolvido para estudo e exemplificação de desenvolvimento com Flutter/Dart na matéria PAC (Projeto de Apredizado Colaborativo). O mesmo não será utilizado para fins comerciais.
 
 A idéia do aplicativo surgiu em torno de centralizar todas as informações relacionadas ao mundo de jogos eletrônicos, tais como lançamentos, placares de campeonato, reviews etc.
+Seu design foi baseado na própria listagem de notícias do Google, visando a simplicidade.
 
-Quanto a parte técnica, desenvolvemos uma API em Python para fazer WebScraping do site <a href="https://flowgames.gg/"  target="_blank"> FlowGames </a>, além disso, utilizamos o **FireBase DataStore** para armazenar as informações obtidas do site, após isso o nosso aplicativo puxa as informações do banco e imprime na tela, fazendo com que o conteúdo do aplicativo sempre seja atualizado automáticamente.
+Quanto a parte técnica, desenvolvemos uma API em Python para fazer WebScraping do site <a href="https://flowgames.gg/"  target="_blank"> FlowGames </a>, além disso, utilizamos o **FireBase DataStore** para armazenar as informações obtidas do site, após isso o nosso aplicativo puxa as informações do banco e imprime na tela, fazendo com que o conteúdo do aplicativo sempre seja atualizado automáticamente. Mais detalhes podem ser encontradas nessa branch: [API-WEBSCRAPP](https://github.com/JnksDavu/GameStellar/tree/API-WEBSCRAPP-FINAL).
 
-Por enquanto o aplicativo conta com as seguintes funcionalidades:
 
+
+O aplicativo conta com as seguintes funcionalidades:
 
 ## Tela de login:
 - Login;
 - Cadastro;
-- Fazer login com a conta do Google;
-- Fazer login com a conta do Facebook;
+- Recuperação de senha.
 
 ## Tela de Cadastro:
 - Fazer cadastro utilizando dados pessoais;
 >[!NOTE]
->A tela de login e cadastro são meramente visuais e não possuem nenhum tipo de verficiação e validação.
+>A tela de login e cadastro possuem conexão e válidação com o banco de dados FireBase, portanto, os dois são funcionais.
 
 
 ## Tela Home:
 - Listagem de notícias;
 - Seleção de notícia;
+- Menu Drawer;
+- Favoritar Notícias;
+
+## Página de Favoritos:
+- Clicar na notícia desejada;
+- Desfavoritar a notícia
 
 ## Menu Drawer:
 - Voltar para a Home;
-- Selecionar Tags
-- Voltar para a tela de Login;
+- Selecionar categorias de notícias;
+- Sair para a tela de Login;
 
 ## Tela individual de cada notícia:
 - Ler a notícia;
