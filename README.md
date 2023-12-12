@@ -10,6 +10,8 @@ Seu design foi baseado na própria listagem de notícias do Google, visando a si
 
 Quanto a parte técnica, desenvolvemos uma API em Python para fazer WebScraping do site <a href="https://flowgames.gg/"  target="_blank"> FlowGames </a>, além disso, utilizamos o **FireBase DataStore** para armazenar as informações obtidas do site, após isso o nosso aplicativo puxa as informações do banco e imprime na tela, fazendo com que o conteúdo do aplicativo sempre seja atualizado automáticamente. Mais detalhes podem ser encontradas nessa branch: [API-WEBSCRAPP](https://github.com/JnksDavu/GameStellar/tree/API-WEBSCRAPP-FINAL).
 
+ ![Mockup](https://github.com/JnksDavu/GameStellar/blob/main/images/mockup.png)
+ </h1>
 
 
 O aplicativo conta com as seguintes funcionalidades:
